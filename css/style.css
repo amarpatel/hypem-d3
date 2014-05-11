@@ -1,0 +1,177 @@
+body {
+  font-family: 'Roboto Condensed', helvetica, arial;
+}
+.list-inline > li {
+  padding-left: 0px;
+}
+.issue-text {
+  pointer-events: none;
+}
+#timeline {
+  stroke: black;
+  opacity: .3;
+  stroke-width: 20px;
+}
+circle {
+  fill: black;
+  fill-opacity: .7;
+  stroke: white;
+  stroke-width: 1px;
+}
+.other {
+  opacity: .8;
+  fill: #998877;
+}
+.story {
+  opacity: .8;
+  fill: yellow;
+}
+.decade-text {
+  fill: gray;
+  opacity: .8;
+  font-size: 270px;
+}
+.decade {
+  filter: url(#css_blur);
+  opacity: .2;
+}
+.d40 {
+  fill: #aabbcc;
+}
+.d50 {
+  fill: #778899;
+}
+.d60 {
+  fill: #445577;
+}
+.d70 {
+  fill: #223344;
+}
+.d80 {
+  fill: #aabbcc;
+}
+.d90 {
+  fill: #778899;
+}
+.d20 {
+  fill: #445577;
+}
+text {
+  font: 10px sans-serif;
+}
+#wrapper {
+  padding-left: 20px;
+  padding-right: 325px;
+  transition: all 0.4s ease 0s;
+}
+
+#sidebar-wrapper {
+  margin-right: -325px;
+  right: 325px;
+  width: 325px;
+  background: #000;
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: all 0.4s ease 0s;
+}
+
+#page-content-wrapper {
+  width: 100%;
+}
+
+.sidebar-nav {
+  position: absolute;
+  top: 0;
+  width: 325px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-nav li {
+  line-height: 40px;
+  text-indent: 20px;
+}
+
+.sidebar-nav li a {
+  color: #999999;
+  display: block;
+  text-decoration: none;
+}
+
+.sidebar-nav li a:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+  text-decoration: none;
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+  text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+  height: 65px;
+  line-height: 60px;
+  font-size: 18px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+  color: #999999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+  color: #fff;
+  background: none;
+}
+
+.content-header {
+  height: 65px;
+  line-height: 65px;
+}
+
+.content-header h1 {
+  margin: 0;
+  margin-right: 20px;
+  line-height: 65px;
+  display: inline-block;
+}
+
+#menu-toggle {
+  display: none;
+}
+
+.inset {
+  padding: 20px;
+}
+
+@media (max-width:767px) {
+  #wrapper {
+    padding-right: 0;
+  }
+
+  #sidebar-wrapper {
+    right: 0;
+  }
+
+  #wrapper.active {
+    position: relative;
+    right: 325px;
+  }
+
+  #wrapper.active #sidebar-wrapper {
+    right: 325px;
+    width: 325px;
+    transition: all 0.4s ease 0s;
+  }
+
+  #menu-toggle {
+    display: inline-block;
+  }
+
+  .inset {
+    padding: 15px;
+  }
+}
