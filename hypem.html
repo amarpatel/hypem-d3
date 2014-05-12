@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>delimited | Force Bubble Charts in D3</title>
+    <title>hypem Loved Songs</title>
     <link rel="shortcut icon" href="../common/delimited-favicon-v4.ico">
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
-        background-color: black;
+        background-color: white;
         padding-left: 50px;
       }
       circle {
@@ -52,39 +52,39 @@
     <script src="lib/underscore.js"></script>
     <script>
 
-// gates_money data
-
       d3.json('data/hypem.json', function (error, data) {
       debugger;
-
-        //d3.entries(data) turns data into array but adds existing data as values under 'value' keys
-        // data = d3.entries(data);
-
-        //trying _.toArray(data) which turns the data into an array and preserves the indeces
         data = _.toArray(data);
+
+        //removes version which is stored in last index
         data.pop();
 
-        console.log(data)
+        // console.log(data)
 
         var width = 1000, height = 1000;
+
+        //use this for dynamically changing color based on some data
         var fill = d3.scale.ordinal()
-          .domain(["loved_count"])
-          // .domain(["low", "medium", "high"])
-          .range(["#d84b2a", "#beccae", "#7aa25c"])
+          .domain(["short", "medium", "long"])
+          .range(["#009999", "#1240ab", "#00CC00"])
 
         var svg = d3.select("#chart").append("svg")
             .attr("width", width)
             .attr("height", height);
 
-        // var max_amount = d3.max(data, function (d) { return parseInt(d.value.loved_count)})
         var max_amount = d3.max(data, function (d) { return parseInt(d.loved_count)})
-        // var max_amount = d3.max(data, function (d) { return parseInt(d.total_amount)})
         var radius_scale = d3.scale.pow().exponent(0.5).domain([0, max_amount]).range([2, 85])
 
         _.each(data, function (elem) {
-          // elem.radius = radius_scale(elem.value.loved_count)*.8;
+          if (elem.time < 180) {
+            elem.duration = 'short';
+          } else if (elem.time < 300) {
+            elem.duration = 'medium'
+          } else {
+            elem.duration = 'long'
+          }
+          console.log(elem.duration);
           elem.radius = radius_scale(elem.loved_count)*.8;
-          // elem.radius = radius_scale(elem.total_amount)*.8;
           elem.all = 'all';
           elem.x = _.random(0, width);
           elem.y = _.random(0, height);
@@ -93,13 +93,13 @@
         var padding = 4;
         var maxRadius = d3.max(_.pluck(data, 'radius'));
 
-        var year_centers = {
-          "2008": {name:"2008", x: 150, y: 300},
-          "2009": {name:"2009", x: 550, y: 300},
-          "2010": {name:"2010", x: 900, y: 300}
+        var time_centers = {
+          "short": {name: "short", x: 150, y: 300},
+          "medium": {name:"medium", x: 900, y: 300},
+          "long": {name:"long", x: 900, y: 300}
         }
 
-        var all_center = { "all": {name:"All Grants", x: 500, y: 300}};
+        var all_center = { "all": {name:"All Songs", x: 500, y: 300}};
 
         var nodes = svg.selectAll("circle")
           .data(data);
@@ -110,11 +110,14 @@
           .attr("cy", function (d) { return d.y; })
           .attr("r", 1)
           //group color
-          .style("fill", function (d) { return fill(d.group); })
+          // .style("fill", function (d) { return fill(d.group); })
+          .style("fill", function (d) { return fill(d.duration); })
+          // .style("fill", d3.hsl(Math.random()*360,.5,.5))
           .on("mouseover", function (d) { showPopover.call(this, d); })
           .on("mouseout", function (d) { removePopovers(); })
 
-        nodes.transition().delay(500).duration(5000)
+        //delay for circle radius growth
+        nodes.transition().delay(100).duration(3000)
           .attr("r", function (d) { return d.radius; })
 
         var force = d3.layout.force()
@@ -124,12 +127,12 @@
 
         draw('all');
 
-        // $( ".btn" ).click(function() {
-        //   draw(this.id);
-        // });
+        $( ".btn" ).click(function() {
+          draw(this.id);
+        });
 
         function draw (varname) {
-          var foci = varname === "all" ? all_center: year_centers;
+          var foci = varname === "all" ? all_center : time_centers;
           force.on("tick", tick(foci, varname, .55));
           labels(foci)
           force.start();
@@ -138,7 +141,6 @@
         function tick (foci, varname, k) {
           return function (e) {
             _.each(data, function (o,i) {
-            // data.forEach(function(o, i) {
               var f = foci[o[varname]];
               o.y += (f.y - o.y) * k * e.alpha;
               o.x += (f.x - o.x) * k * e.alpha;
@@ -152,7 +154,6 @@
 
         function labels (foci) {
           svg.selectAll(".label").remove();
-
           svg.selectAll(".label")
           .data(_.toArray(foci)).enter().append("text")
           .attr("class", "label")
@@ -175,11 +176,11 @@
             trigger: 'manual',
             html : true,
             content: function() { 
-              return 'Artist: ' +  d.artist
-                     + '<br/>Title: ' +  d.title
-                     + '<br/>Loved Count: ' +  d.loved_count
-                     + '<br/><img src="' + d.thumb_url_medium + '"/>'
-                   }
+              return 'Artist: ' +  d.artist + 
+                     '<br/>Title: ' +  d.title + 
+                     '<br/>Loved Count: ' +  d.loved_count + 
+                     '<br/><img src="' + d.thumb_url_medium + '"/>'
+            }
           });
           $(this).popover('show')
         }
