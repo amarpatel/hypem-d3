@@ -30,7 +30,8 @@
       <label class="btn btn-default active" id="all">
         <input type="radio" name="options"> All Songs
       </label>
-      <label class="btn btn-default" id="start_year">
+      <label class="btn btn-default" id="duration">
+      <!-- <label class="btn btn-default" id="start_year"> -->
         <input type="radio" name="options"> Songs By Duration
       </label>
     </div>
@@ -39,18 +40,24 @@
     <script src="lib/jquery.js"></script>
     <script src="lib/bootstrap.js"></script>
     <script src="lib/underscore.js"></script>
+        TODO: <br/>
+    make songs play <br/>
+    figure out sorting <br/>
+    maybe implement dragging ? <br/>
     <script>
 
-      d3.json('http://hypem.com/playlist/popular/7day/json/1/data.js', function (error, data) {
+      d3.json('http://hypem.com/playlist/popular/3day/json/1/data.js', function (error, data) {
       debugger;
         data = _.toArray(data);
+        console.log(data);
 
         //removes version which is stored in last index
         data.pop();
 
         // console.log(data)
 
-        var width = 1000, height = 1000;
+        // var width = 1000, height = 1000;
+        var width = window.innerWidth, height = window.innerHeight;
 
         //use this for dynamically changing color based on some data
         var fill = d3.scale.ordinal()
@@ -72,7 +79,6 @@
           } else {
             elem.duration = 'long'
           }
-          console.log(elem.duration);
           elem.radius = radius_scale(elem.loved_count)*.8;
           elem.all = 'all';
           elem.x = _.random(0, width);
@@ -84,7 +90,7 @@
 
         var time_centers = {
           "short": {name: "short", x: 150, y: 300},
-          "medium": {name:"medium", x: 900, y: 300},
+          "medium": {name:"medium", x: 525, y: 300},
           "long": {name:"long", x: 900, y: 300}
         }
 
@@ -121,6 +127,7 @@
         });
 
         function draw (varname) {
+          debugger;
           var foci = varname === "all" ? all_center : time_centers;
           force.on("tick", tick(foci, varname, .55));
           labels(foci)
