@@ -31,8 +31,7 @@
         <input type="radio" name="options"> All Songs
       </label>
       <label class="btn btn-default" id="duration">
-      <!-- <label class="btn btn-default" id="start_year"> -->
-        <input type="radio" name="options"> Songs By Duration
+        <input type="radio" name="options"> Sort By Duration
       </label>
     </div>
     <div id="chart"></div>
@@ -42,8 +41,7 @@
     <script src="lib/underscore.js"></script>
         TODO: <br/>
     make songs play <br/>
-    figure out sorting <br/>
-    maybe implement dragging ? <br/>
+    change time to minutes and seconds <br/>
     <script>
 
       d3.json('http://hypem.com/playlist/popular/3day/json/1/data.js', function (error, data) {
@@ -175,6 +173,7 @@
               return 'Artist: ' +  d.artist + 
                      '<br/>Title: ' +  d.title + 
                      '<br/>Loved Count: ' +  d.loved_count + 
+                     '<br/>Time: ' +  d.time + 
                      '<br/><img src="' + d.thumb_url_medium + '"/>'
             }
           });
@@ -208,6 +207,8 @@
           };
         }
       });
+    // $('body').append('audio controls');
+    // $('audio controls autoplay loop').attr('src',null);
     </script>
   </body>
 </html>
